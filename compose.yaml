@@ -1,0 +1,109 @@
+services:
+  etcd1:
+    image: gcr.io/etcd-development/etcd:v3.5.12
+    ports: ["12379:12379", "12380:12380"]
+    command: >-
+      /usr/local/bin/etcd
+      -name etcd1
+      -data-dir /etcd-data
+      -listen-client-urls http://0.0.0.0:12379
+      -advertise-client-urls http://0.0.0.0:12379
+      -listen-peer-urls http://172.16.0.4:12380
+      -initial-advertise-peer-urls http://172.16.0.4:12380
+      -initial-cluster etcd1=http://172.16.0.4:12380,etcd2=http://172.16.0.5:12382,etcd3=http://172.16.0.6:12384,etcd4=http://172.16.0.7:12386,etcd5=http://172.16.0.8:12388
+      -initial-cluster-token tkn
+      -initial-cluster-state new
+    networks:
+      etcd-network:
+        ipv4_address: 172.16.0.4
+    volumes:
+      - etcd1:/etcd-data
+  etcd2:
+    image: gcr.io/etcd-development/etcd:v3.5.12
+    ports: ["12381:12381", "12382:12382"]
+    command: >-
+      /usr/local/bin/etcd
+      -name etcd2
+      -data-dir /etcd-data
+      -listen-client-urls http://0.0.0.0:12381
+      -advertise-client-urls http://0.0.0.0:12381
+      -listen-peer-urls http://172.16.0.5:12382
+      -initial-advertise-peer-urls http://172.16.0.5:12382
+      -initial-cluster etcd1=http://172.16.0.4:12380,etcd2=http://172.16.0.5:12382,etcd3=http://172.16.0.6:12384,etcd4=http://172.16.0.7:12386,etcd5=http://172.16.0.8:12388
+      -initial-cluster-token tkn
+      -initial-cluster-state new
+    networks:
+      etcd-network:
+        ipv4_address: 172.16.0.5
+    volumes:
+      - etcd2:/etcd-data
+  etcd3:
+    image: gcr.io/etcd-development/etcd:v3.5.12
+    ports: ["12383:12383", "12384:12384"]
+    command: >-
+      /usr/local/bin/etcd
+      -name etcd3
+      -data-dir /etcd-data
+      -listen-client-urls http://0.0.0.0:12383
+      -advertise-client-urls http://0.0.0.0:12383
+      -listen-peer-urls http://172.16.0.6:12384
+      -initial-advertise-peer-urls http://172.16.0.6:12384
+      -initial-cluster etcd1=http://172.16.0.4:12380,etcd2=http://172.16.0.5:12382,etcd3=http://172.16.0.6:12384,etcd4=http://172.16.0.7:12386,etcd5=http://172.16.0.8:12388
+      -initial-cluster-token tkn
+      -initial-cluster-state new
+    networks:
+      etcd-network:
+        ipv4_address: 172.16.0.6
+    volumes:
+      - etcd3:/etcd-data
+  etcd4:
+    image: gcr.io/etcd-development/etcd:v3.5.12
+    ports: ["12385:12385", "12386:12386"]
+    command: >-
+      /usr/local/bin/etcd
+      -name etcd4
+      -data-dir /etcd-data
+      -listen-client-urls http://0.0.0.0:12385
+      -advertise-client-urls http://0.0.0.0:12385
+      -listen-peer-urls http://172.16.0.7:12386
+      -initial-advertise-peer-urls http://172.16.0.7:12386
+      -initial-cluster etcd1=http://172.16.0.4:12380,etcd2=http://172.16.0.5:12382,etcd3=http://172.16.0.6:12384,etcd4=http://172.16.0.7:12386,etcd5=http://172.16.0.8:12388
+      -initial-cluster-token tkn
+      -initial-cluster-state new
+    networks:
+      etcd-network:
+        ipv4_address: 172.16.0.7
+    volumes:
+      - etcd4:/etcd-data
+  etcd5:
+    image: gcr.io/etcd-development/etcd:v3.5.12
+    ports: ["12387:12387", "12388:12388"]
+    command: >-
+      /usr/local/bin/etcd
+      -name etcd5
+      -data-dir /etcd-data
+      -listen-client-urls http://0.0.0.0:12387
+      -advertise-client-urls http://0.0.0.0:12387
+      -listen-peer-urls http://172.16.0.8:12388
+      -initial-advertise-peer-urls http://172.16.0.8:12388
+      -initial-cluster etcd1=http://172.16.0.4:12380,etcd2=http://172.16.0.5:12382,etcd3=http://172.16.0.6:12384,etcd4=http://172.16.0.7:12386,etcd5=http://172.16.0.8:12388
+      -initial-cluster-token tkn
+      -initial-cluster-state new
+    networks:
+      etcd-network:
+        ipv4_address: 172.16.0.8
+    volumes:
+      - etcd5:/etcd-data
+networks:
+  etcd-network:
+    name: etcd-network
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.16.0.0/24
+volumes:
+  etcd1:
+  etcd2:
+  etcd3:
+  etcd4:
+  etcd5:
